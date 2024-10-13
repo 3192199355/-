@@ -38,6 +38,7 @@ inline void putimage_alpha(int x, int y, IMAGE* img)
 	}
 }*/
 using namespace std;
+
 bool gamerunning = 1;
 IMAGE shadow;
 int tot = 0;
@@ -109,15 +110,51 @@ public:
 					case VK_UP:
 						ismoveup = 1;
 						break;
+					case 'w':
+						ismoveup = 1;
+						break;
+					case 'W':
+						ismoveup = 1;
+						break;
 					case VK_LEFT:
+						ismoveleft = 1;
+						break;
+					case 'a':
+						ismoveleft = 1;
+						break;
+					case 'A':
 						ismoveleft = 1;
 						break;
 					case VK_DOWN:
 						ismovedown = 1;
 						break;
+					case 's':
+						ismovedown = 1;
+						break;
+					case 'S':
+						ismovedown = 1;
+						break;
 					case VK_RIGHT:
 						ismoveright = 1;
 						break;
+					case 'd':
+						ismoveright = 1;
+						break;
+					case 'D':
+						ismoveright = 1;
+						break;
+					case 'k':
+						mciSendString(_T("play shift from 0"), NULL, 0, NULL);
+						if (ismoveup == 1)		playery -= 100;
+						if (ismovedown == 1)	playery += 100;
+						if (ismoveleft == 1)	playerx -= 100;
+						if (ismoveright == 1)	playerx += 100;
+					case 'K':
+						mciSendString(_T("play shift from 0"), NULL, 0, NULL);
+						if (ismoveup == 1)		playery -= 100;
+						if (ismovedown == 1)	playery += 100;
+						if (ismoveleft == 1)	playerx -= 100;
+						if (ismoveright == 1)	playerx += 100;
 					}
 				}
 				if (msg.message == WM_KEYUP)
@@ -127,13 +164,37 @@ public:
 					case VK_UP:
 						ismoveup = 0;
 						break;
+					case 'w':
+						ismoveup = 0;
+						break;
+					case 'W':
+						ismoveup = 0;
+						break;
 					case VK_LEFT:
+						ismoveleft = 0;
+						break;
+					case 'a':
+						ismoveleft = 0;
+						break;
+					case 'A':
 						ismoveleft = 0;
 						break;
 					case VK_DOWN:
 						ismovedown = 0;
 						break;
+					case 's':
+						ismovedown = 0;
+						break;
+					case 'S':
+						ismovedown = 0;
+						break;
 					case VK_RIGHT:
+						ismoveright = 0;
+						break;
+					case 'd':
+						ismoveright = 0;
+						break;
+					case 'D':
 						ismoveright = 0;
 						break;
 					}
@@ -506,7 +567,9 @@ int main()
 	double shengcun = 0;
 	int biansu=10;
 	srand(time(NULL));
-	
+	mciSendString(_T("open mus/shift.wav alias shift"), NULL, 0, NULL);
+	mciSendString(_T("open mus/bgm.mp3 alias bgm"), NULL, 0, NULL);
+	mciSendString(_T("open mus/hit.wav alias hit"), NULL, 0, NULL);
 	//loadimage(&shadow, _T("img/shadow_player.png"));
 	//load_player();
 	initgraph(1280, 720);
@@ -537,8 +600,7 @@ int main()
 			double shengcun = 0;
 			int biansu = 10;
 
-			mciSendString(_T("open mus/bgm.mp3 alias bgm"), NULL, 0, NULL);
-			mciSendString(_T("open mus/hit.wav alias hit"), NULL, 0, NULL);
+			
 			mciSendString(_T("play bgm repeat from 0"), NULL, 0, NULL);
 			vector<enemy*>newenemy;
 			vector<bullet>bullets(3);
