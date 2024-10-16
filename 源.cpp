@@ -4,7 +4,10 @@
 #include<string>
 #include<vector>
 #include<cmath>
+#include<thread>
+#include <mutex>
 using namespace std;
+std::mutex mciMutex; // 创建互斥锁
 //IMAGE player_left[6];
 //IMAGE player_right[6];
 int playerx=500,playery=500;
@@ -38,7 +41,23 @@ inline void putimage_alpha(int x, int y, IMAGE* img)
 	}
 }*/
 using namespace std;
-
+void playSoundWithPlaySound()
+{
+	std::lock_guard<std::mutex> lock(mciMutex); // 自动加锁解锁
+	if (!PlaySound(TEXT("mus/shift.wav"), NULL, SND_FILENAME | SND_ASYNC))
+	{
+		TCHAR buffer[256];
+		DWORD error = GetLastError();
+		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			buffer, sizeof(buffer), NULL);
+		std::wcout << L"Error playing sound with PlaySound: " << buffer << std::endl;
+	}
+	else
+	{
+		std::wcout << L"Playing sound with PlaySound in thread " << std::this_thread::get_id() << std::endl;
+	}
+}
 bool gamerunning = 1;
 IMAGE shadow;
 int tot = 0;
@@ -144,17 +163,32 @@ public:
 						ismoveright = 1;
 						break;
 					case 'k':
-						mciSendString(_T("play shift from 0"), NULL, 0, NULL);
-						if (ismoveup == 1)		playery -= 100;
-						if (ismovedown == 1)	playery += 100;
-						if (ismoveleft == 1)	playerx -= 100;
-						if (ismoveright == 1)	playerx += 100;
 					case 'K':
-						mciSendString(_T("play shift from 0"), NULL, 0, NULL);
-						if (ismoveup == 1)		playery -= 100;
-						if (ismovedown == 1)	playery += 100;
-						if (ismoveleft == 1)	playerx -= 100;
-						if (ismoveright == 1)	playerx += 100;
+						//mciSendString(_T("play shift from 0"), NULL, 0, NULL);
+						//HANDLE hThread = CreateThread(
+						//	NULL,           // 默认的安全属性
+						//	0,              // 使用默认堆栈大小
+						//	(LPTHREAD_START_ROUTINE)PlayAudioThread,  // 线程函数指针
+						//	NULL,           // 线程函数参数
+						//	0,              // 使用默认创建标志
+						//	NULL);          // 不需要线程ID
+						//if (hThread != NULL)
+						//{
+						//	 等待线程结束
+						//	WaitForSingleObject(hThread, INFINITE);
+						//	 关闭线程句柄
+						//	CloseHandle(hThread);
+						//}
+						thread t(playSoundWithPlaySound);
+						if (t.joinable())
+						{
+							t.detach();
+						}
+						int yuanx, yuany;
+						if (ismoveup == 1)		playery -= shift_distance;
+						if (ismovedown == 1)	playery += shift_distance;
+						if (ismoveleft == 1)	playerx -= shift_distance;
+						if (ismoveright == 1)	playerx += shift_distance;
 					}
 				}
 				if (msg.message == WM_KEYUP)
@@ -242,6 +276,7 @@ private:
 	bool ismoveleft = 0;
 	int playerspeed = 5;
 	IMAGE img_background;
+	int shift_distance = 50;
 };
 /*Animation player_left(_T("img/player_left_%d.png"), 6, 45);
 Animation player_right(_T("img/player_right_%d.png"), 6, 45);
