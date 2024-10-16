@@ -221,7 +221,8 @@ public:
 							playerx += shift_distance;
 						}
 						shifttot = shiftzhen;
-						cd = 35;
+						cd = setcd;
+						playerspeed++;
 						}
 						
 					}
@@ -284,8 +285,34 @@ public:
 	void draw(int delta)
 	{		if (shifttot)
 			{
+		/*if (abs(yuanx - playerx - 35) * abs(yuanx - playerx - 35) + abs(yuany - playery - 45) * abs(yuany - playery - 45) > 10000)
+		{
+			yuanx = (yuanx + playerx + 35) / 2;
+			yuany = (yuany + playery + 45) / 2;
+		}*/
+		if (shifttot == shiftzhen-15)
+		{
+			yuanx = (yuanx + playerx + 35) / 2;
+			yuany = (yuany + playery + 45) / 2;
+		}
+		if (shifttot == shiftzhen / 4)
+		{
+			yuanx = (yuanx + playerx + 35) / 2;
+			yuany = (yuany + playery + 45) / 2;
+		}
+		if (shifttot == shiftzhen /3)
+		{
+			yuanx = (yuanx + playerx + 35) / 2;
+			yuany = (yuany + playery + 45) / 2;
+		}
+		if (shifttot == shiftzhen / 5)
+		{
+			yuanx = (yuanx + playerx + 35) / 2;
+			yuany = (yuany + playery + 45) / 2;
+		}
 				line(playerx+35, playery+45, yuanx, yuany);
 				shifttot--;
+				if (shifttot == 0)	playerspeed--;
 			}
 			if (cd > 0)	cd--;
 		    int dir_x = ismoveright - ismoveleft;
@@ -309,8 +336,9 @@ private:
 	
 	bool shifting = 0;
 	int shifttot = 0;
-	int shiftzhen = 15;
+	int shiftzhen = 35;
 	int cd = 0;
+	int setcd = 35;
 	const int shadow_width = 32;
 	Animation* mplayer_left;
 	Animation* mplayer_right;
@@ -318,7 +346,7 @@ private:
 	bool ismovedown = 0;
 	bool ismoveright = 0;
 	bool ismoveleft = 0;
-	int playerspeed = 4;
+	int playerspeed = 3;
 	IMAGE img_background;
 	int shift_distance = 50;
 	int yuanx, yuany;
