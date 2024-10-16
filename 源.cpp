@@ -184,11 +184,24 @@ public:
 						{
 							t.detach();
 						}
-						int yuanx, yuany;
-						if (ismoveup == 1)		playery -= shift_distance;
-						if (ismovedown == 1)	playery += shift_distance;
-						if (ismoveleft == 1)	playerx -= shift_distance;
-						if (ismoveright == 1)	playerx += shift_distance;
+						yuanx=playerx+35, yuany=playery+45;
+						if (ismoveup == 1)
+						{
+							playery -= shift_distance;
+						}
+						if (ismovedown == 1)
+						{
+							playery += shift_distance;
+						}
+						if (ismoveleft == 1)
+						{
+							playerx -= shift_distance;
+						}
+						if (ismoveright == 1)
+						{
+							playerx += shift_distance;
+						}
+						shifttot = shiftzhen;
 					}
 				}
 				if (msg.message == WM_KEYUP)
@@ -247,7 +260,11 @@ public:
 		
 	}
 	void draw(int delta)
-	{
+	{		if (shifttot)
+			{
+				line(playerx+35, playery+45, yuanx, yuany);
+				shifttot--;
+			}
 		    int dir_x = ismoveright - ismoveleft;
 			static bool faceing_left = 0;
 			int shadow_x = playerx + (player_width - shadow_width) / 2;
@@ -260,13 +277,16 @@ public:
 			else if (dir_x > 0) faceing_left = 0;
 			if (faceing_left == 1)	mplayer_left->play(playerx, playery, delta);
 			if (faceing_left == 0)	mplayer_right->play(playerx, playery, delta);
+			
 		}
 	int playerx = 500, playery = 500;
 	const int player_width = 80;
 	const int player_height = 80;
 private:
 	
-	
+	bool shifting = 0;
+	int shifttot = 0;
+	int shiftzhen = 15;
 	const int shadow_width = 32;
 	Animation* mplayer_left;
 	Animation* mplayer_right;
@@ -277,6 +297,7 @@ private:
 	int playerspeed = 5;
 	IMAGE img_background;
 	int shift_distance = 50;
+	int yuanx, yuany;
 };
 /*Animation player_left(_T("img/player_left_%d.png"), 6, 45);
 Animation player_right(_T("img/player_right_%d.png"), 6, 45);
