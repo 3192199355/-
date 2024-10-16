@@ -51,11 +51,11 @@ void playSoundWithPlaySound()
 		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 			buffer, sizeof(buffer), NULL);
-		std::wcout << L"Error playing sound with PlaySound: " << buffer << std::endl;
+		
 	}
 	else
 	{
-		std::wcout << L"Playing sound with PlaySound in thread " << std::this_thread::get_id() << std::endl;
+		
 	}
 }
 void playSoundHit()
@@ -68,11 +68,11 @@ void playSoundHit()
 		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 			buffer, sizeof(buffer), NULL);
-		std::wcout << L"Error playing sound with PlaySound: " << buffer << std::endl;
+		
 	}
 	else
 	{
-		std::wcout << L"Playing sound with PlaySound in thread " << std::this_thread::get_id() << std::endl;
+		
 	}
 }
 bool gamerunning = 1;
@@ -196,6 +196,8 @@ public:
 						//	 ¹Ø±ÕÏß³Ì¾ä±ú
 						//	CloseHandle(hThread);
 						//}
+						if (cd== 0)
+						{
 						thread t(playSoundWithPlaySound);
 						if (t.joinable())
 						{
@@ -219,6 +221,9 @@ public:
 							playerx += shift_distance;
 						}
 						shifttot = shiftzhen;
+						cd = 35;
+						}
+						
 					}
 				}
 				if (msg.message == WM_KEYUP)
@@ -282,6 +287,7 @@ public:
 				line(playerx+35, playery+45, yuanx, yuany);
 				shifttot--;
 			}
+			if (cd > 0)	cd--;
 		    int dir_x = ismoveright - ismoveleft;
 			static bool faceing_left = 0;
 			int shadow_x = playerx + (player_width - shadow_width) / 2;
@@ -304,6 +310,7 @@ private:
 	bool shifting = 0;
 	int shifttot = 0;
 	int shiftzhen = 15;
+	int cd = 0;
 	const int shadow_width = 32;
 	Animation* mplayer_left;
 	Animation* mplayer_right;
@@ -311,7 +318,7 @@ private:
 	bool ismovedown = 0;
 	bool ismoveright = 0;
 	bool ismoveleft = 0;
-	int playerspeed = 5;
+	int playerspeed = 4;
 	IMAGE img_background;
 	int shift_distance = 50;
 	int yuanx, yuany;
