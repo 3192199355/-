@@ -58,6 +58,23 @@ void playSoundWithPlaySound()
 		std::wcout << L"Playing sound with PlaySound in thread " << std::this_thread::get_id() << std::endl;
 	}
 }
+void playSoundHit()
+{
+	std::lock_guard<std::mutex> lock(mciMutex); // 自动加锁解锁
+	if (!PlaySound(TEXT("mus/hit.wav"), NULL, SND_FILENAME | SND_ASYNC))
+	{
+		TCHAR buffer[256];
+		DWORD error = GetLastError();
+		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			buffer, sizeof(buffer), NULL);
+		std::wcout << L"Error playing sound with PlaySound: " << buffer << std::endl;
+	}
+	else
+	{
+		std::wcout << L"Playing sound with PlaySound in thread " << std::this_thread::get_id() << std::endl;
+	}
+}
 bool gamerunning = 1;
 IMAGE shadow;
 int tot = 0;
@@ -749,7 +766,12 @@ int main()
 					}
 					if (newenemy[i]->alive == 0)
 					{
-						mciSendString(_T("play hit from 0"), NULL, 0, NULL);
+						//mciSendString(_T("play hit from 0"), NULL, 0, NULL);
+						thread tt(playSoundHit);
+						if (tt.joinable())
+						{
+							tt.detach();
+						}
 						enemy* New = newenemy[i];
 						swap(newenemy[i], newenemy.back());
 						newenemy.pop_back();
