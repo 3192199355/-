@@ -680,7 +680,7 @@ int main()
 	mciSendString(_T("open mus/hit.wav alias hit"), NULL, 0, NULL);
 	//loadimage(&shadow, _T("img/shadow_player.png"));
 	//load_player();
-	initgraph(1280, 720);
+	initgraph(1280, 720, EX_NOCLOSE);
 	setlinecolor(RGB(255,0,0));
 	HWND hwnd = GetHWnd();
 	IMAGE menu;
