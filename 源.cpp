@@ -198,7 +198,7 @@ public:
 						//}
 						if (cd== 0)
 						{
-						setlinecolor(RGB(255, 155, 50));
+						
 						thread t(playSoundWithPlaySound);
 						if (t.joinable())
 						{
@@ -286,6 +286,7 @@ public:
 	void draw(int delta)
 	{		if (shifttot)
 			{
+		setlinecolor(RGB(255, 155, 50));
 		/*if (abs(yuanx - playerx - 35) * abs(yuanx - playerx - 35) + abs(yuany - playery - 45) * abs(yuany - playery - 45) > 10000)
 		{
 			yuanx = (yuanx + playerx + 35) / 2;
