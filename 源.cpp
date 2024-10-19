@@ -457,14 +457,22 @@ public:
 		
 		if (speed == yuanspeed + 1)
 		{
-			setlinecolor(RGB(255, 155, 50));
+			setlinecolor(YELLOW);
 			line(x-5, y+20, x-5, y + 60);
 			line(x + 80+5, y+20, x + 80+5, y + 60);
 			line(x + 40, y-20, x + 40, y + 40);
 		}
 		if (speed == yuanspeed + 2)
-		{
-			setlinecolor(RED);
+		{	
+			setlinecolor(RGB(255, 155, 50));
+			
+			line(x - 5, y + 20, x - 5, y + 60);
+			line(x + 80 + 5, y + 20, x + 80 + 5, y + 60);
+			line(x + 40, y - 20, x + 40, y + 40);
+		}
+		if (speed >= yuanspeed + 3)
+		{	setlinecolor(RED);
+			
 			line(x - 5, y + 20, x - 5, y + 60);
 			line(x + 80 + 5, y + 20, x + 80 + 5, y + 60);
 			line(x + 40, y - 20, x + 40, y + 40);
@@ -727,6 +735,8 @@ int main()
 			int biansu = 10;		//10s一定变速
 			int suijianbiansu = 5;	//5s随机变速
 			bool biansule = 0;
+			int shibian = 10;
+			int wubian = 10;
 			mciSendString(_T("play bgm repeat from 0"), NULL, 0, NULL);
 			vector<enemy*>newenemy;
 			vector<bullet>bullets(3);
@@ -876,21 +886,30 @@ int main()
 					if (!biansule)
 					{
 						int temp = (int)(rand() % 20);
-						if (temp <= 15)
+						if (temp<=shibian)
 						{
 							for (int i = 0; i < newenemy.size(); i++)
 							{
 								newenemy[i]->speed += 1;
 							}
 						}
+						else if (temp == 16)
+						{
+							for (int i = 0; i < newenemy.size(); i++)
+							{
+								newenemy[i]->speed += 3;
+							}
+						}
 						else
 						{
-						for (int i = 0; i < newenemy.size(); i++)
-						{
-						newenemy[i]->speed += 2;
+							for (int i = 0; i < newenemy.size(); i++)
+							{
+							newenemy[i]->speed += 2;
+							}
+
 						}
-						}
-						
+						shibian--;
+						if (shibian == 0)	shibian++;
 						biansule = 1;
 					}
 					
@@ -901,10 +920,10 @@ int main()
 					if (!biansule)
 					{
 						int temp = (int)(rand() % 20);
-						if (temp <= 15)
+						if (temp <= wubian)
 						{
 						}
-						else if(temp==16)
+						else if(temp==16||temp%wubian==0)
 						{
 							for (int i = 0; i < newenemy.size(); i++)
 							{
@@ -918,6 +937,8 @@ int main()
 							newenemy[i]->speed += 1;
 							}
 						}
+						wubian--;
+						if (wubian == 0)	wubian++;
 					biansule = 1;
 					}
 					suijianbiansu += 5;
