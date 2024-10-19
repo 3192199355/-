@@ -385,10 +385,11 @@ public:
 };
 void updatebullet(vector<bullet>& bullets, const player& nplayer)
 {
-	const double radial_speed = 0.004;//径向速度
+	const double radial_speed = 0;//径向速度
 	const double tangent_speed = 0.0055;//切向速度
+	double banjing = 90;
 	double radial_interval = 2 * 3.14159 / bullets.size();//子弹之间的间距
-	double radiul = 90 + 20 * sin(GetTickCount() * radial_speed);//子弹半径
+	double radiul =banjing + 20 * sin(GetTickCount() * radial_speed);//子弹半径
 	for (size_t i = 0; i < bullets.size();i++)
 	{
 		double radial = GetTickCount() * tangent_speed + radial_interval * i;
@@ -857,10 +858,22 @@ int main()
 				{
 					if (!biansule)
 					{
+						int temp = (int)(rand() % 20);
+						if (temp <= 15)
+						{
+							for (int i = 0; i < newenemy.size(); i++)
+							{
+								newenemy[i]->speed += 1;
+							}
+						}
+						else
+						{
 						for (int i = 0; i < newenemy.size(); i++)
-					{
-						newenemy[i]->speed += 1;
-					}
+						{
+						newenemy[i]->speed += 2;
+						}
+						}
+						
 						biansule = 1;
 					}
 					
@@ -870,7 +883,11 @@ int main()
 				{
 					if (!biansule)
 					{
-						if ((int)(rand() % 3) == 0)
+						int temp = (int)(rand() % 20);
+						if (temp <= 15)
+						{
+						}
+						else
 						{
 							for (int i = 0; i < newenemy.size(); i++)
 							{
