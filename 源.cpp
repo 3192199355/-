@@ -198,6 +198,7 @@ public:
 						//}
 						if (cd== 0)
 						{
+						setlinecolor(RGB(255, 155, 50));
 						thread t(playSoundWithPlaySound);
 						if (t.joinable())
 						{
@@ -453,6 +454,21 @@ public:
 	{
 		int shadow_x = x + (enemy_width - shadow_width) / 2-10;
 		int shadow_y = y + enemy_height-35;
+		
+		if (speed == yuanspeed + 1)
+		{
+			setlinecolor(RGB(255, 155, 50));
+			line(x-5, y+20, x-5, y + 60);
+			line(x + 80+5, y+20, x + 80+5, y + 60);
+			line(x + 40, y-20, x + 40, y + 40);
+		}
+		if (speed == yuanspeed + 2)
+		{
+			setlinecolor(RED);
+			line(x - 5, y + 20, x - 5, y + 60);
+			line(x + 80 + 5, y + 20, x + 80 + 5, y + 60);
+			line(x + 40, y - 20, x + 40, y + 40);
+		}
 		putimage_alpha(shadow_x, shadow_y, &shadow);
 		//if (x == pl.playerx && y == pl.playery)
 		//{
@@ -516,6 +532,7 @@ public:
 	}
 	bool alive = 1;
     int speed=2;
+	int yuanspeed = 2;
 private:
 	int x, y;
 	IMAGE shadow;
