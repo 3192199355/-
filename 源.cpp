@@ -904,6 +904,13 @@ int main()
 						if (temp <= 15)
 						{
 						}
+						else if(temp==16)
+						{
+							for (int i = 0; i < newenemy.size(); i++)
+							{
+								newenemy[i]->speed += 2;
+							}
+						}
 						else
 						{
 							for (int i = 0; i < newenemy.size(); i++)
