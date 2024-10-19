@@ -290,7 +290,7 @@ public:
 			yuanx = (yuanx + playerx + 35) / 2;
 			yuany = (yuany + playery + 45) / 2;
 		}*/
-		if (shifttot == shiftzhen-15)
+		if (shifttot == shiftzhen-10)
 		{
 			yuanx = (yuanx + playerx + 35) / 2;
 			yuany = (yuany + playery + 45) / 2;
@@ -706,9 +706,9 @@ int main()
 		else
 		{
 			double shengcun = 0;
-			int biansu = 10;
-
-			
+			int biansu = 10;		//10s一定变速
+			int suijianbiansu = 5;	//5s随机变速
+			bool biansule = 0;
 			mciSendString(_T("play bgm repeat from 0"), NULL, 0, NULL);
 			vector<enemy*>newenemy;
 			vector<bullet>bullets(3);
@@ -774,6 +774,7 @@ int main()
 				if (playery <= 0)	playery = 0;
 				if (playerx >= 1280- 80)	playerx = 1280 - 80;
 				if (playery >= 720 - 80)	playery = 720 - 80;*/
+				biansule = 0;
 				cleardevice();
 				putimage(0, 0, &img_background);
 				TCHAR s[20];
@@ -850,21 +851,42 @@ int main()
 				//tot %= 6;
 				//DrawPlayer(1000 / 60,  ismoveright-ismoveleft);
 				FlushBatchDraw();
+				
+				shengcun += 1000 / 60;
+				if (shengcun / 1000 > biansu)
+				{
+					if (!biansule)
+					{
+						for (int i = 0; i < newenemy.size(); i++)
+					{
+						newenemy[i]->speed += 1;
+					}
+						biansule = 1;
+					}
+					
+					biansu += 10;
+				}
+				if (shengcun / 1000 > suijianbiansu)
+				{
+					if (!biansule)
+					{
+						if ((int)(rand() % 3) == 0)
+						{
+							for (int i = 0; i < newenemy.size(); i++)
+							{
+							newenemy[i]->speed += 1;
+							}
+						}
+					biansule = 1;
+					}
+					suijianbiansu += 5;
+				}
 				DWORD endtime = GetTickCount();
 				if (endtime - starttime < 1000 / 60)
 				{
 					Sleep(1000 / 60 - (endtime - starttime));
 				}
 				starttime = endtime;
-				shengcun += 1000 / 60;
-				if (shengcun / 1000 > biansu)
-				{
-					for (int i = 0; i < newenemy.size(); i++)
-					{
-						newenemy[i]->speed += 1;
-					}
-					biansu += 10;
-				}
 			}
 		}
 	}
